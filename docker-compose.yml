@@ -1,7 +1,19 @@
 services:
   music-assistant:
-    build: .
-    image: lmsma/music-assistant:lms-sync
+    # Builds from the Honnobilis forks (the player-name fixes), pinned by commit:
+    #  - server:       Honnobilis/server        claude/squeezebox-radio-name-bug-7keueb
+    #  - aioslimproto: Honnobilis/aioslimproto  claude/squeezebox-radio-name-bug-7keueb
+    # The manifest of that server commit still pins the older aioslimproto, so the
+    # fixed one is installed explicitly at build time (AIOSLIMPROTO_REQ).
+    # Once the pull requests are merged, point these back at Carunga/* (and drop
+    # AIOSLIMPROTO_REQ once the manifest pins the fixed aioslimproto).
+    build:
+      context: .
+      args:
+        SERVER_REPO: https://github.com/Honnobilis/server
+        SERVER_REV: 6d5f073286d6e0dcf0a48c87e1265235e8cf26dd
+        AIOSLIMPROTO_REQ: git+https://github.com/Honnobilis/aioslimproto@28d074bfb17d8d67b0e39b1f48e68d52de2f5b9e
+    image: lmsma/music-assistant:lms-sync-honnobilis
     container_name: ma-squeeze-harder
     restart: unless-stopped
     # Host networking is REQUIRED for SlimProto discovery and audio streaming:

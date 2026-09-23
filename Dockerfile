@@ -23,6 +23,18 @@ ARG SERVER_REV=7740615c23e265dd9be05ea589fa1e1d9c90b836
 # retry after the install would not pick up the patched constants.
 RUN /app/venv/bin/uv pip uninstall aioslimproto
 
+# Optional: install aioslimproto at build time from this pip requirement, e.g.
+#   git+https://github.com/<owner>/aioslimproto@<full-sha>
+# Left empty, Music Assistant installs the version pinned in the provider manifest
+# on the first provider load (see README). Set it to try an aioslimproto revision
+# that the manifest of the pinned server revision does not point to yet: the
+# provider then imports cleanly on its first load, and Music Assistant, which only
+# (re)installs the manifest requirement when that import fails, leaves it alone.
+ARG AIOSLIMPROTO_REQ=
+RUN if [ -n "${AIOSLIMPROTO_REQ}" ]; then \
+        /app/venv/bin/uv pip install "${AIOSLIMPROTO_REQ}"; \
+    fi
+
 # Fetch the patched provider and the core cache fix at the pinned revision.
 RUN git clone --filter=blob:none --no-checkout "${SERVER_REPO}" /tmp/server \
  && git -C /tmp/server fetch --depth 1 origin "${SERVER_REV}" \

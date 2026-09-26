@@ -12,7 +12,7 @@ services:
       args:
         SERVER_REPO: https://github.com/Honnobilis/server
         SERVER_REV: 6d5f073286d6e0dcf0a48c87e1265235e8cf26dd
-        AIOSLIMPROTO_REQ: git+https://github.com/Honnobilis/aioslimproto@28d074bfb17d8d67b0e39b1f48e68d52de2f5b9e
+        AIOSLIMPROTO_REQ: git+https://github.com/Honnobilis/aioslimproto@2f707dbf4ecef02779a21be3a6b75d89c1c8cd1d
     image: lmsma/music-assistant:lms-sync-honnobilis
     container_name: ma-squeeze-harder
     restart: unless-stopped
